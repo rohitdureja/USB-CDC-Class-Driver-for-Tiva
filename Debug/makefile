@@ -8,10 +8,14 @@ CG_TOOL_ROOT := C:/ti/ccsv5/tools/compiler/arm_5.1.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
+"./utils/ustdlib.obj" \
+"./utils/uartstdio.obj" \
+"./usb_structs.obj" \
 "./startup_ccs.obj" \
 "./main.obj" \
 "../usb_cdc_driver_ccs.cmd" \
 -l"libc.a" \
+-l"C:/ti/TivaWare_C_Series-1.1/examples/boards/ek-tm4c123gxl/project0/ccs/../../../../../usblib/ccs/Debug/usblib.lib" \
 -l"C:/ti/TivaWare_C_Series-1.1/examples/boards/ek-tm4c123gxl/project0/ccs/../../../../../driverlib/ccs/Debug/driverlib.lib" \
 
 -include ../makefile.init
@@ -22,7 +26,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include utils/subdir_vars.mk
 -include subdir_rules.mk
+-include utils/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -125,8 +131,8 @@ usb_cdc_driver.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(TMS470_EXECUTABLE_OUTPUTS__QUOTED) "usb_cdc_driver.out"
-	-$(RM) "main.pp" "startup_ccs.pp" 
-	-$(RM) "main.obj" "startup_ccs.obj" 
+	-$(RM) "main.pp" "startup_ccs.pp" "usb_structs.pp" "utils\uartstdio.pp" "utils\ustdlib.pp" 
+	-$(RM) "main.obj" "startup_ccs.obj" "usb_structs.obj" "utils\uartstdio.obj" "utils\ustdlib.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

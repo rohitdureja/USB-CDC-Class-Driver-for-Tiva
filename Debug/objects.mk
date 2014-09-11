@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -l"libc.a" -l"C:/ti/TivaWare_C_Series-1.1/examples/boards/ek-tm4c123gxl/project0/ccs/../../../../../driverlib/ccs/Debug/driverlib.lib"
+LIBS := -l"libc.a" -l"C:/ti/TivaWare_C_Series-1.1/examples/boards/ek-tm4c123gxl/project0/ccs/../../../../../usblib/ccs/Debug/usblib.lib" -l"C:/ti/TivaWare_C_Series-1.1/examples/boards/ek-tm4c123gxl/project0/ccs/../../../../../driverlib/ccs/Debug/driverlib.lib"
 
