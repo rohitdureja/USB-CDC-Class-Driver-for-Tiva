@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * CCS linker configuration file for udma_demo.
+ * usb_dev_serial_ccs.cmd - CCS linker configuration file for usb_dev_serial.
  *
  * Copyright (c) 2012-2013 Texas Instruments Incorporated.  All rights reserved.
  * Software License Agreement
