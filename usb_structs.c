@@ -155,8 +155,8 @@ uint32_t ControlHandler(void *pvCBData, uint32_t ui32Event,
 // function and the callback data set to our CDC instance structure.
 //
 //*****************************************************************************
-extern const tUSBBuffer g_sTxBuffer;
-extern const tUSBBuffer g_sRxBuffer;
+extern const tUSBBuffer TxBuffer;
+extern const tUSBBuffer RxBuffer;
 
 tUSBDCDCDevice g_sCDCDevice =
 {
@@ -167,9 +167,9 @@ tUSBDCDCDevice g_sCDCDevice =
     ControlHandler,
     (void *)&g_sCDCDevice,
     USBBufferEventCallback,
-    (void *)&g_sRxBuffer,
+    (void *)&RxBuffer,
     USBBufferEventCallback,
-    (void *)&g_sTxBuffer,
+    (void *)&TxBuffer,
     g_ppui8StringDescriptors,
     NUM_STRING_DESCRIPTORS
 };
@@ -179,9 +179,9 @@ tUSBDCDCDevice g_sCDCDevice =
 // Receive buffer (from the USB perspective).
 //
 //*****************************************************************************
-uint8_t g_pui8USBRxBuffer[UART_BUFFER_SIZE];
+uint8_t g_pui8USBRxBuffer[USB_BUFFER_SIZE];
 uint8_t g_pui8RxBufferWorkspace[USB_BUFFER_WORKSPACE_SIZE];
-const tUSBBuffer g_sRxBuffer =
+const tUSBBuffer RxBuffer =
 {
     false,                          // This is a receive buffer.
     RxHandler,                      // pfnCallback
@@ -190,7 +190,7 @@ const tUSBBuffer g_sRxBuffer =
     USBDCDCRxPacketAvailable,       // pfnAvailable
     (void *)&g_sCDCDevice,          // pvHandle
     g_pui8USBRxBuffer,              // pui8Buffer
-    UART_BUFFER_SIZE,               // ui32BufferSize
+    USB_BUFFER_SIZE,               // ui32BufferSize
     g_pui8RxBufferWorkspace         // pvWorkspace
 };
 
@@ -199,9 +199,9 @@ const tUSBBuffer g_sRxBuffer =
 // Transmit buffer (from the USB perspective).
 //
 //*****************************************************************************
-uint8_t g_pui8USBTxBuffer[UART_BUFFER_SIZE];
+uint8_t g_pui8USBTxBuffer[USB_BUFFER_SIZE];
 uint8_t g_pui8TxBufferWorkspace[USB_BUFFER_WORKSPACE_SIZE];
-const tUSBBuffer g_sTxBuffer =
+const tUSBBuffer TxBuffer =
 {
     true,                           // This is a transmit buffer.
     TxHandler,                      // pfnCallback
@@ -210,6 +210,6 @@ const tUSBBuffer g_sTxBuffer =
     USBDCDCTxPacketAvailable,       // pfnAvailable
     (void *)&g_sCDCDevice,          // pvHandle
     g_pui8USBTxBuffer,              // pui8Buffer
-    UART_BUFFER_SIZE,               // ui32BufferSize
+    USB_BUFFER_SIZE,               // ui32BufferSize
     g_pui8TxBufferWorkspace         // pvWorkspace
 };

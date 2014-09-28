@@ -10,6 +10,7 @@ ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./utils/ustdlib.obj" \
 "./utils/uartstdio.obj" \
+"./usbconfig.obj" \
 "./usb_structs.obj" \
 "./startup_ccs.obj" \
 "./main.obj" \
@@ -131,8 +132,8 @@ usb_cdc_driver.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(TMS470_EXECUTABLE_OUTPUTS__QUOTED) "usb_cdc_driver.out"
-	-$(RM) "main.pp" "startup_ccs.pp" "usb_structs.pp" "utils\uartstdio.pp" "utils\ustdlib.pp" 
-	-$(RM) "main.obj" "startup_ccs.obj" "usb_structs.obj" "utils\uartstdio.obj" "utils\ustdlib.obj" 
+	-$(RM) "main.pp" "startup_ccs.pp" "usb_structs.pp" "usbconfig.pp" "utils\uartstdio.pp" "utils\ustdlib.pp" 
+	-$(RM) "main.obj" "startup_ccs.obj" "usb_structs.obj" "usbconfig.obj" "utils\uartstdio.obj" "utils\ustdlib.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

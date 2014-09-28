@@ -22,20 +22,19 @@ main.obj: C:/ti/TivaWare_C_Series-1.1/driverlib/sysctl.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/driverlib/systick.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/driverlib/timer.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/driverlib/uart.h
-main.obj: C:/ti/TivaWare_C_Series-1.1/driverlib/usb.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/driverlib/rom.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/usblib/usblib.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/usblib/usbcdc.h
-main.obj: C:/ti/TivaWare_C_Series-1.1/usblib/usb-ids.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/usblib/device/usbdevice.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/usblib/device/usbdevicepriv.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/usblib/device/usbdcdc.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/utils/ustdlib.h
 main.obj: C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/stdarg.h
 main.obj: C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/time.h
-main.obj: ../usb_structs.h
 main.obj: C:/ti/TivaWare_C_Series-1.1/utils/uartstdio.h
 main.obj: C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/stdarg.h
+main.obj: ../usb_structs.h
+main.obj: ../usbconfig.h
 
 ../main.c: 
 C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/stdbool.h: 
@@ -59,17 +58,16 @@ C:/ti/TivaWare_C_Series-1.1/driverlib/sysctl.h:
 C:/ti/TivaWare_C_Series-1.1/driverlib/systick.h: 
 C:/ti/TivaWare_C_Series-1.1/driverlib/timer.h: 
 C:/ti/TivaWare_C_Series-1.1/driverlib/uart.h: 
-C:/ti/TivaWare_C_Series-1.1/driverlib/usb.h: 
 C:/ti/TivaWare_C_Series-1.1/driverlib/rom.h: 
 C:/ti/TivaWare_C_Series-1.1/usblib/usblib.h: 
 C:/ti/TivaWare_C_Series-1.1/usblib/usbcdc.h: 
-C:/ti/TivaWare_C_Series-1.1/usblib/usb-ids.h: 
 C:/ti/TivaWare_C_Series-1.1/usblib/device/usbdevice.h: 
 C:/ti/TivaWare_C_Series-1.1/usblib/device/usbdevicepriv.h: 
 C:/ti/TivaWare_C_Series-1.1/usblib/device/usbdcdc.h: 
 C:/ti/TivaWare_C_Series-1.1/utils/ustdlib.h: 
 C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/stdarg.h: 
 C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/time.h: 
-../usb_structs.h: 
 C:/ti/TivaWare_C_Series-1.1/utils/uartstdio.h: 
 C:/ti/ccsv5/tools/compiler/arm_5.1.1/include/stdarg.h: 
+../usb_structs.h: 
+../usbconfig.h: 

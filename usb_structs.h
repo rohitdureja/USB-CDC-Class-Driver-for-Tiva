@@ -33,15 +33,15 @@
 // a maxmum-sized USB packet.
 //
 //*****************************************************************************
-#define UART_BUFFER_SIZE 256
+#define USB_BUFFER_SIZE 256
 
 extern uint32_t RxHandler(void *pvCBData, uint32_t ui32Event,
                           uint32_t ui32MsgValue, void *pvMsgData);
 extern uint32_t TxHandler(void *pvi32CBData, uint32_t ui32Event,
                           uint32_t ui32MsgValue, void *pvMsgData);
 
-extern const tUSBBuffer g_sTxBuffer;
-extern const tUSBBuffer g_sRxBuffer;
+extern const tUSBBuffer TxBuffer;
+extern const tUSBBuffer RxBuffer;
 extern tUSBDCDCDevice g_sCDCDevice;
 extern uint8_t g_pui8USBTxBuffer[];
 extern uint8_t g_pui8USBRxBuffer[];
