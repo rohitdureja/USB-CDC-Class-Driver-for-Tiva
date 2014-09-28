@@ -739,6 +739,8 @@ RxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
           void *pvMsgData)
 {
     uint32_t ui32Count;
+    uint32_t numbytes;
+    uint8_t data[1];
 
     //
     // Which event are we being sent?
@@ -755,6 +757,11 @@ RxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
             // interrupt so we are told when there is more space.
             //
         	UARTprintf("\nData received");
+        	numbytes = USBBufferDataAvailable(&g_sRxBuffer);
+        	UARTprintf("\n%d", numbytes);
+        	USBBufferRead(&g_sRxBuffer, data, numbytes);
+        	UARTprintf("\n%c", data[0]);
+
 //            USBUARTPrimeTransmit(USB_UART_BASE);
 //            ROM_UARTIntEnable(USB_UART_BASE, UART_INT_TX);
             break;
