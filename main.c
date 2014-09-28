@@ -89,14 +89,7 @@
 //
 //*****************************************************************************
 
-//*****************************************************************************
-//
-// The system tick rate expressed both as ticks per second and a millisecond
-// period.
-//
-//*****************************************************************************
-#define SYSTICKS_PER_SECOND 100
-#define SYSTICK_PERIOD_MS (1000 / SYSTICKS_PER_SECOND)
+
 
 //*****************************************************************************
 //
@@ -155,19 +148,6 @@ uint32_t g_ui32UARTRxErrors = 0;
 #define RX_GPIO_PERIPH          SYSCTL_PERIPH_GPIOA
 #define RX_GPIO_PIN             GPIO_PIN_0
 
-//*****************************************************************************
-//
-// Flag indicating whether or not we are currently sending a Break condition.
-//
-//*****************************************************************************
-static bool g_bSendingBreak = false;
-
-//*****************************************************************************
-//
-// Global system tick counter
-//
-//*****************************************************************************
-volatile uint32_t g_ui32SysTickCount = 0;
 
 //*****************************************************************************
 //
@@ -192,13 +172,9 @@ static volatile bool g_bUSBConfigured = false;
 // Internal function prototypes.
 //
 //*****************************************************************************
-static void USBUARTPrimeTransmit(uint32_t ui32Base);
-static void CheckForSerialStateChange(const tUSBDCDCDevice *psDevice,
-                                      int32_t i32Errors);
 static void SetControlLineState(uint16_t ui16State);
 static bool SetLineCoding(tLineCoding *psLineCoding);
 static void GetLineCoding(tLineCoding *psLineCoding);
-static void SendBreak(bool bSend);
 
 //*****************************************************************************
 //
@@ -237,13 +213,6 @@ void ConfigureUART(void)
 }
 
 
-// Interrupt handler for the system tick counter.
-void SysTickIntHandler(void)
-{
-
-}
-
-
 //*****************************************************************************
 //
 // Set the state of the RS232 RTS and DTR signals.
@@ -264,8 +233,7 @@ SetControlLineState(uint16_t ui16State)
 // Set the communication parameters to use on the UART.
 //
 //*****************************************************************************
-static bool
-SetLineCoding(tLineCoding *psLineCoding)
+static bool SetLineCoding(tLineCoding *psLineCoding)
 {
     uint32_t ui32Config;
     bool bRetcode;
@@ -396,11 +364,6 @@ SetLineCoding(tLineCoding *psLineCoding)
     }
 
     //
-    // Set the UART mode appropriately.
-    //
-    //ROM_UARTConfigSetExpClk(USB_UART_BASE, ROM_SysCtlClockGet(), psLineCoding->ui32Rate, ui32Config);
-
-    //
     // Let the caller know if we had a problem or not.
     //
     return(bRetcode);
@@ -411,8 +374,7 @@ SetLineCoding(tLineCoding *psLineCoding)
 // Get the communication parameters in use on the UART.
 //
 //*****************************************************************************
-static void
-GetLineCoding(tLineCoding *psLineCoding)
+static void GetLineCoding(tLineCoding *psLineCoding)
 {
     uint32_t ui32Config;
     uint32_t ui32Rate;
@@ -514,38 +476,6 @@ GetLineCoding(tLineCoding *psLineCoding)
 
 //*****************************************************************************
 //
-// This function sets or clears a break condition on the redirected UART RX
-// line.  A break is started when the function is called with \e bSend set to
-// \b true and persists until the function is called again with \e bSend set
-// to \b false.
-//
-//*****************************************************************************
-static void
-SendBreak(bool bSend)
-{
-    //
-    // Are we being asked to start or stop the break condition?
-    //
-    if(!bSend)
-    {
-        //
-        // Remove the break condition on the line.
-        //
-        //ROM_UARTBreakCtl(USB_UART_BASE, false);
-        g_bSendingBreak = false;
-    }
-    else
-    {
-        //
-        // Start sending a break condition on the line.
-        //
-        //ROM_UARTBreakCtl(USB_UART_BASE, true);
-        g_bSendingBreak = true;
-    }
-}
-
-//*****************************************************************************
-//
 // Handles CDC driver notifications related to control and setup of the device.
 //
 // \param pvCBData is the client-supplied callback pointer for this channel.
@@ -561,8 +491,7 @@ SendBreak(bool bSend)
 // \return The return value is event-specific.
 //
 //*****************************************************************************
-uint32_t
-ControlHandler(void *pvCBData, uint32_t ui32Event,
+uint32_t ControlHandler(void *pvCBData, uint32_t ui32Event,
                uint32_t ui32MsgValue, void *pvMsgData)
 {
     uint32_t ui32IntsOff;
@@ -636,14 +565,14 @@ ControlHandler(void *pvCBData, uint32_t ui32Event,
         // Send a break condition on the serial line.
         //
         case USBD_CDC_EVENT_SEND_BREAK:
-            SendBreak(true);
+            //SendBreak(true);
             break;
 
         //
         // Clear the break condition on the serial line.
         //
         case USBD_CDC_EVENT_CLEAR_BREAK:
-            SendBreak(false);
+           // SendBreak(false);
             break;
 
         //
@@ -686,8 +615,7 @@ ControlHandler(void *pvCBData, uint32_t ui32Event,
 // \return The return value is event-specific.
 //
 //*****************************************************************************
-uint32_t
-TxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
+uint32_t TxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
           void *pvMsgData)
 {
     //
@@ -734,13 +662,12 @@ TxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
 // \return The return value is event-specific.
 //
 //*****************************************************************************
-uint32_t
-RxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
+uint32_t RxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
           void *pvMsgData)
 {
     uint32_t ui32Count;
     uint32_t numbytes;
-    uint8_t data[1];
+    uint8_t data[32];
 
     //
     // Which event are we being sent?
@@ -760,10 +687,10 @@ RxHandler(void *pvCBData, uint32_t ui32Event, uint32_t ui32MsgValue,
         	numbytes = USBBufferDataAvailable(&g_sRxBuffer);
         	UARTprintf("\n%d", numbytes);
         	USBBufferRead(&g_sRxBuffer, data, numbytes);
-        	UARTprintf("\n%c", data[0]);
+        	UARTprintf("\n%s", data);
+        	USBBufferFlush(&g_sRxBuffer);
+        	USBBufferWrite(&g_sTxBuffer, data, numbytes);
 
-//            USBUARTPrimeTransmit(USB_UART_BASE);
-//            ROM_UARTIntEnable(USB_UART_BASE, UART_INT_TX);
             break;
         }
 
@@ -927,74 +854,6 @@ main(void)
     //
     while(1)
     {
-//        //
-//        // Have we been asked to update the status display?
-//        //
-//        if(g_ui32Flags & COMMAND_STATUS_UPDATE)
-//        {
-//            //
-//            // Clear the command flag
-//            //
-//            ROM_IntMasterDisable();
-//            g_ui32Flags &= ~COMMAND_STATUS_UPDATE;
-//            ROM_IntMasterEnable();
-//        }
-//
-//        //
-//        // Has there been any transmit traffic since we last checked?
-//        //
-//        if(ui32TxCount != g_ui32UARTTxCount)
-//        {
-//            //
-//            // Turn on the Green LED.
-//            //
-//            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);
-//
-//            //
-//            // Delay for a bit.
-//            //
-//            for(ui32Loop = 0; ui32Loop < 150000; ui32Loop++)
-//            {
-//            }
-//
-//            //
-//            // Turn off the Green LED.
-//            //
-//            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0);
-//
-//            //
-//            // Take a snapshot of the latest transmit count.
-//            //
-//            ui32TxCount = g_ui32UARTTxCount;
-//        }
-//
-//        //
-//        // Has there been any receive traffic since we last checked?
-//        //
-//        if(ui32RxCount != g_ui32UARTRxCount)
-//        {
-//            //
-//            // Turn on the Blue LED.
-//            //
-//            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
-//
-//            //
-//            // Delay for a bit.
-//            //
-//            for(ui32Loop = 0; ui32Loop < 150000; ui32Loop++)
-//            {
-//            }
-//
-//            //
-//            // Turn off the Blue LED.
-//            //
-//            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
-//
-//            //
-//            // Take a snapshot of the latest receive count.
-//            //
-//            ui32RxCount = g_ui32UARTRxCount;
-//
-//        }
+
     }
 }

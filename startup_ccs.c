@@ -56,8 +56,6 @@ extern uint32_t __STACK_TOP;
 // External declarations for the interrupt handlers used by the application.
 //
 //*****************************************************************************
-extern void SysTickIntHandler(void);
-//extern void USBUARTIntHandler(void);
 extern void USB0DeviceIntHandler(void);
 
 //*****************************************************************************
@@ -86,13 +84,13 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
     IntDefaultHandler,                      // The PendSV handler
-    SysTickIntHandler,                      // The SysTick handler
+    IntDefaultHandler,                      // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
     IntDefaultHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
-    /*USBUARTIntHandler*/IntDefaultHandler,                      // UART0 Rx and Tx
+    IntDefaultHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
     IntDefaultHandler,                      // I2C0 Master and Slave
